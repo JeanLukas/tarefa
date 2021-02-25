@@ -33,7 +33,6 @@ class PessoasController {
         pessoa.id = 22L
         pessoa.endereco = "Rua Joao Pessoa"
         return ResponseEntity.ok(pessoa)
-        val listaPessoas = arrayListOf(pessoa)
     }
 
     //teste 03
@@ -56,7 +55,10 @@ class PessoasController {
         pessoa4.id = 89L
         pessoa4.endereco = "Beira do Rio1"
         val listaPessoas = arrayListOf(pessoa1, pessoa2, pessoa3, pessoa4)
-        return ResponseEntity.ok(listaPessoas)
+          val tf = listaPessoas.forEach {
+                  println(it)
+              }
+                return ResponseEntity.ok(tf)
     }
 
     //teste 03
@@ -128,87 +130,93 @@ class PessoasController {
 
 
         val listaLista = arrayListOf(lista, lista1, lista2, lista3, lista4, lista5, lista6, lista7, lista8)
-        //return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(listaLista)
+
 
         return ResponseEntity.ok(listaLista)
     }
 
-    //teste 03
-    @PostMapping("/inter/novo/gol")
-    fun interGols(@RequestBody dado : Dado): ResponseEntity<Any> {
-        return ResponseEntity.ok(dado)
+        //teste 03
+        @PostMapping("/inter/novo/gol")
+        fun interGols(@RequestBody dado: Dado): ResponseEntity<Any> {
+            return ResponseEntity.ok(dado)
+        }
+
+        //teste 03
+        @PostMapping("/test")
+        fun testOne(@RequestBody pessoa: Pessoa): ResponseEntity<Any> {
+            return ResponseEntity.ok(pessoa)
+
+        }
+
+
+        //teste 04
+        @PutMapping("/teste5")
+        fun testeFi(@RequestBody pessoa: Pessoa): ResponseEntity<Any> {
+
+            return ResponseEntity.ok(pessoa)
+        }
+
+        //teste 05
+        @PutMapping("/teste4")
+        fun testeF(@RequestBody dado: Dado): ResponseEntity<Any> {
+
+            return ResponseEntity.ok(dado)
+        }
+
+        //teste 06
+        @GetMapping("/teste02")
+        fun testT(
+            @RequestParam("nome", defaultValue = "Anderson") nome: String,
+            @RequestParam("sobrenome", defaultValue = "Silva") sobrenome: String
+        ): ResponseEntity<Any> {
+
+            return ResponseEntity.ok(nome + sobrenome)
+        }
+
+        //teste07
+        @GetMapping("/teste/{id}")
+        fun opaName(@PathVariable("id") id: Long): ResponseEntity<Any> {
+            var name = "Cristina"
+            var test = "Opa ${name}, tudo certo?"
+            return ResponseEntity.ok(test)
+        }
+
+        //teste 08
+        @DeleteMapping("/teste/{id}")
+        fun delete(@PathVariable("id") id: Long): ResponseEntity<Any> {
+            return ResponseEntity.ok("deletado")
+        }
+
+        //teste 09
+        @DeleteMapping("/del")
+        fun deletee(
+            @RequestParam("id", defaultValue = 12.toString()) id: Int,
+            @RequestParam("preco", defaultValue = 90.99.toString()) preco: Double
+        ): ResponseEntity<Any> {
+            return ResponseEntity.ok("Deletado!!!!!")
+        }
+
+        //teste 10
+        @DeleteMapping("/testando/{id}")
+        fun remove(@PathParam("id") id: Long?): ResponseEntity<String> {
+
+            return ResponseEntity.ok("Deletado!!!${id}")
+        }
+
     }
 
-    //teste 03
-    @PostMapping("/test")
-    fun testOne( @RequestBody pessoa: Pessoa): ResponseEntity<Any> {
-        return ResponseEntity.ok(pessoa)
-
+    class Pessoa {
+        var nome: String = ""
+        var id = 0L
+        var endereco: String = ""
     }
 
+    class Dado {
+        var tipo: String = ""
+        var id: Int = 0
+        var codigo: Long = 0L
+        var preco: Double = 0.00
+        var lugar: String = ""
+        var numero: Int = 0
 
-    //teste 04
-    @PutMapping("/teste5")
-    fun testeFi(@RequestBody pessoa : Pessoa): ResponseEntity<Any> {
-
-        return ResponseEntity.ok(pessoa)
     }
-
-    //teste 05
-    @PutMapping("/teste4")
-    fun testeF(@RequestBody dado : Dado): ResponseEntity<Any> {
-
-        return ResponseEntity.ok(dado)
-    }
-
-    //teste 06
-    @GetMapping("/teste02")
-    fun testT(@RequestParam("nome", defaultValue = "Anderson") nome : String,
-                @RequestParam("sobrenome", defaultValue = "Silva") sobrenome : String): ResponseEntity<Any> {
-
-        return ResponseEntity.ok(nome + sobrenome)
-    }
-
-    //teste07
-    @GetMapping("/teste/{id}")
-    fun opaName(@PathVariable("id") id: Long): ResponseEntity<Any> {
-        var name = "Cristina"
-        var test = "Opa ${name}, tudo certo?"
-        return ResponseEntity.ok(test)
-    }
-
-    //teste 08
-    @DeleteMapping("/teste/{id}")
-    fun delete(@PathVariable("id") id: Long): ResponseEntity<Any> {
-        return ResponseEntity.ok("deletado")
-    }
-
-    //teste 09
-    @DeleteMapping("/del")
-    fun deletee(@RequestParam("id", defaultValue = 12.toString()) id: Int,
-                @RequestParam("preco", defaultValue = 90.99.toString()) preco : Double): ResponseEntity<Any> {
-        return ResponseEntity.ok("Deletado!!!!!")
-    }
-
-    //teste 10
-    @DeleteMapping("/testando/{id}")
-    fun remove(@PathParam("id") id: Long?): ResponseEntity<String> {
-
-        return ResponseEntity.ok("Deletado!!!${id}")
-    }
-}
-
-class Pessoa{
-    var nome : String = ""
-    var id  = 0L
-    var endereco : String = ""
-}
-class Dado {
-    var tipo : String = ""
-    var id : Int = 0
-    var codigo : Long = 0L
-    var preco : Double = 0.00
-    var lugar : String = ""
-    var numero : Int = 0
-
-}
