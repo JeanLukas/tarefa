@@ -1,6 +1,6 @@
 package com.tarefa.tarefa.repository
-//
-//import com.tarefa.tarefa.entity.Pessoas
+
+import com.tarefa.tarefa.entity.Pessoas
 //import org.springframework.data.jpa.repository.JpaRepository
 //import org.springframework.data.repository.query.Param
 //
