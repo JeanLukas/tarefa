@@ -1,6 +1,6 @@
 package com.tarefa.tarefa.repository
 
-import com.tarefa.tarefa.entity.Pessoas
+//import com.tarefa.tarefa.entity.Pessoas
 
 //interface DadoRepository : JpaRepository<Pessoas, String>{
 //

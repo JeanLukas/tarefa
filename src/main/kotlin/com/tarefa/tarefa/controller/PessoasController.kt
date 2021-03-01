@@ -2,17 +2,13 @@ package com.tarefa.tarefa.controller
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-
 import org.springframework.web.bind.annotation.PathVariable
-
-import org.springframework.web.bind.annotation.RequestMapping
-
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
+import java.lang.Exception
+import java.lang.IllegalArgumentException
 import javax.websocket.server.PathParam
-import kotlin.reflect.jvm.internal.ReflectProperties
+
 
 
 @RestController
@@ -21,14 +17,13 @@ class PessoasController {
 
     companion object {
         const val ENDPOINT_PESSOA = "/api/pessoaController"
-        const val ENDPOINT_JSON = "/lista"
-
     }
+
 
     //teste 01
     @GetMapping("${ENDPOINT_PESSOA}/pessoa")
     fun helloPessoa(): ResponseEntity<Any> {
-        var pessoa = Pessoa()
+        val pessoa = Pessoa()
         pessoa.nome = "Douglas"
         pessoa.id = 22L
         pessoa.endereco = "Rua Joao Pessoa"
@@ -38,11 +33,11 @@ class PessoasController {
     //teste 03
     @GetMapping("/teste003")
     fun helloListaPessoa(): ResponseEntity<Any> {
-        var pessoa1 = Pessoa()
+        val pessoa1 = Pessoa()
         pessoa1.nome = "Livia"
         pessoa1.id = 33L
         pessoa1.endereco = "Avenida Salgado filho"
-        var pessoa2 = Pessoa()
+        val pessoa2 = Pessoa()
         pessoa2.nome = "Luciano"
         pessoa2.id = 87L
         pessoa2.endereco = "Avenida flores"
@@ -56,30 +51,78 @@ class PessoasController {
         pessoa4.endereco = "Beira do Rio1"
         val listaPessoas = arrayListOf(pessoa1, pessoa2, pessoa3, pessoa4)
             val tf = listaPessoas.forEach {
-            println(it.nome   +
+            println(it.nome +
                     it.id +
                     it.endereco)
         }
+
         return ResponseEntity.ok(tf)
+    }
+
+    @GetMapping("/testando")
+    fun tryingFors() : ResponseEntity<Any>{
+        val listando = mutableListOf<Pessoa>()
+        var lon = 1
+        val i =  40L
+        val j = " e Joao"
+        val name = "Cleison"
+        val ender = "rua posto ipiranga"
+        while (lon <= 30){
+            val p = Pessoa()
+            p.id = i
+            p.nome = name + j
+            p.endereco = ender
+            listando.add(p)
+            lon++
+            println("passou $lon")
+        }
+         val tt= listando.forEach {
+             println(it.nome +
+                     it.id +
+                     it.endereco)
+         }
+        return ResponseEntity.ok(listando + tt)
     }
 
 
 
 
+    @GetMapping("/teste004")
+    fun test()  : ResponseEntity<Any> {
+        val list = mutableListOf<Pessoa>()
+        var i = 1L
+        val j = "Cleber"
+        while (i <= 10L) {
+            println("Line $i")
+            val pessoa = Pessoa()
+            pessoa.id = i
+            //pessoa.endereco = "Endereço $i"
+            pessoa.nome = j
+            list.add(pessoa)
+
+            ++i
+        }
+        return ResponseEntity.ok(list)
+    }
 
         //teste 03
         @PostMapping("/test")
         fun testOne(@RequestBody pessoa: Pessoa): ResponseEntity<Any> {
-            return ResponseEntity.ok(pessoa)
-
+                    return ResponseEntity.ok(pessoa)
         }
 
 
         //teste 04
         @PutMapping("/teste5")
         fun testeFi(@RequestBody pessoa: Pessoa): ResponseEntity<Any> {
+                return try{
+                    throw IllegalArgumentException("erro")
+                    ResponseEntity.ok(pessoa)
+                }catch (e: Exception){
+                    e.printStackTrace()
+                    ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR ).body("Erro")
+                }
 
-            return ResponseEntity.ok(pessoa)
         }
 
 
@@ -90,16 +133,22 @@ class PessoasController {
             @RequestParam("nome", defaultValue = "Anderson") nome: String,
             @RequestParam("sobrenome", defaultValue = "Silva") sobrenome: String
         ): ResponseEntity<Any> {
-
             return ResponseEntity.ok(nome + sobrenome)
         }
 
         //teste07
         @GetMapping("/teste/{id}")
         fun opaName(@PathVariable("id") id: Long): ResponseEntity<Any> {
-            var name = "Cristina"
-            var test = "Opa ${name}, tudo certo?"
-            return ResponseEntity.ok(test)
+            val name = "Cristina"
+            val test = "Opa ${name}, tudo certo?"
+
+            return try {
+                println("rolou")
+                return ResponseEntity.ok(test)
+            }catch (e: Exception){
+                e.printStackTrace()
+                ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR ).body("id nulo")
+            }
         }
 
         //teste 08

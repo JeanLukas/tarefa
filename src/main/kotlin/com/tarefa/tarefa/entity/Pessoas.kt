@@ -1,9 +1,9 @@
 package com.tarefa.tarefa.entity
 
-import javax.persistence.Entity
+//import javax.persistence.Entity
 
 
-@Entity
-class Pessoas {
-
-}
+//@Entity
+//class Pessoas {
+//
+//}
