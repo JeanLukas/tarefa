@@ -1,5 +1,8 @@
 package com.tarefa.tarefa.controller
 
+import com.tarefa.tarefa.entity.pessoas.Pessoas
+import com.tarefa.tarefa.service.PessoaService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -7,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 import java.lang.Exception
 import java.lang.IllegalArgumentException
+import javax.servlet.http.HttpServletRequest
 import javax.websocket.server.PathParam
 
 
@@ -104,14 +108,69 @@ class PessoasController {
         }
         return ResponseEntity.ok(list)
     }
+/* ============================= MVC ========================================*/
 
-        //teste 03
-        @PostMapping("/test")
-        fun testOne(@RequestBody pessoa: Pessoa): ResponseEntity<Any> {
-                    return ResponseEntity.ok(pessoa)
+    @Autowired
+    lateinit var pessoasService: PessoaService
+
+    @GetMapping("/encontrarPorId")
+    fun get(@PathVariable("id")id : Long) : ResponseEntity<Any>{
+        return try{
+            return ResponseEntity.ok("foi")
+        }catch (e: Exception){
+            e.printStackTrace()
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro.")
         }
+    }
 
 
+    @PostMapping("/saving")
+    fun save(@RequestBody person: Pessoas): ResponseEntity<Any> {
+        return try {
+            ResponseEntity.ok(pessoasService.save(person))
+        } catch (e: java.lang.IllegalArgumentException) {
+            e.printStackTrace()
+            ResponseEntity.status(HttpStatus.BAD_REQUEST ).body(e.message)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar panfleto.")
+        }
+    }
+
+    @DeleteMapping("/delete")
+    fun delete( @PathVariable("id") id: Long): ResponseEntity<Any> {
+
+        return try {
+            val people = pessoasService.findById(id)
+            run {
+                people.id?.let { pessoasService.delete(it) }
+                ResponseEntity.ok(people)
+            }
+
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR ).body("Delete wasnt finished.")
+        }
+    }
+
+
+    @PutMapping("update/{id}")
+    fun update(@RequestBody pessoa: Pessoas, @PathVariable("id") id: Long): ResponseEntity<Any> {
+
+        return try {
+
+            if (id <= 0.toLong()) {
+                throw IllegalArgumentException("Erro.")
+            }
+            ResponseEntity.ok(pessoasService.save(pessoa))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR ).body("Erro ao atualizar user.")
+        }
+    }
+
+
+
+/*------------------------------------ANTIGO---------------------------------*/
         //teste 04
         @PutMapping("/teste5")
         fun testeFi(@RequestBody pessoa: Pessoa): ResponseEntity<Any> {
@@ -151,11 +210,7 @@ class PessoasController {
             }
         }
 
-        //teste 08
-        @DeleteMapping("/teste/{id}")
-        fun delete(@PathVariable("id") id: Long): ResponseEntity<Any> {
-            return ResponseEntity.ok("deletado")
-        }
+
 
         //teste 09
         @DeleteMapping("/del")
